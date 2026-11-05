@@ -8,7 +8,8 @@ import nodemailer from "nodemailer";
 dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3e3;
+const rawPort = process.env.PORT;
+const PORT = rawPort ? isNaN(Number(rawPort)) ? rawPort : Number(rawPort) : 3e3;
 const DATA_DIR = process.env.VERCEL ? path.join("/tmp", "fc_data") : path.join(__dirname, "data");
 const DB_FILE = path.join(DATA_DIR, "fc_database.json");
 try {
@@ -2499,13 +2500,19 @@ async function startServer() {
       res.sendFile(path.resolve(distPath, "index.html"));
     });
   }
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`FC Tournament Server running on port ${PORT}`);
-  });
+  if (typeof PORT === "number") {
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`FC Tournament Server running on port ${PORT}`);
+    });
+  } else {
+    app.listen(PORT, () => {
+      console.log(`FC Tournament Server running on socket ${PORT}`);
+    });
+  }
 }
 var server_default = app;
 const isMainModule = Boolean(
-  process.argv[1] && (fileURLToPath(import.meta.url) === path.resolve(process.argv[1]) || process.argv[1].endsWith("server.ts") || process.argv[1].endsWith("server.js"))
+  process.argv[1] && (fileURLToPath(import.meta.url) === path.resolve(process.argv[1]) || process.argv[1].endsWith("server.ts") || process.argv[1].endsWith("server.js") || process.argv[1].endsWith("app.js") || process.argv[1].endsWith("index.js"))
 );
 if (isMainModule && !process.env.VERCEL) {
   startServer().catch((err) => {
