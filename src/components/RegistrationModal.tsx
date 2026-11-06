@@ -20,6 +20,11 @@ import {
   FileCheck2,
   Clock,
   Layers,
+  Copy,
+  Check,
+  ExternalLink,
+  CreditCard,
+  MessageCircle,
 } from 'lucide-react';
 
 interface RegistrationModalProps {
@@ -58,10 +63,22 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
   const [fileError, setFileError] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [createdRegistration, setCreatedRegistration] = useState<Registration | null>(null);
+  const [copiedRib, setCopiedRib] = useState(false);
+  const [copiedPhone, setCopiedPhone] = useState(false);
+
+  const copyToClipboard = (text: string, type: 'rib' | 'phone') => {
+    navigator.clipboard?.writeText(text);
+    if (type === 'rib') {
+      setCopiedRib(true);
+      setTimeout(() => setCopiedRib(false), 2500);
+    } else {
+      setCopiedPhone(true);
+      setTimeout(() => setCopiedPhone(false), 2500);
+    }
+  };
 
   const handleFileProcess = (file: File) => {
     setFileError(null);
@@ -344,6 +361,92 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
                     className="w-full pl-9 pr-3 py-2 rounded-xl bg-[#111722] border border-[#202b3d] text-white placeholder-slate-500 focus:outline-none focus:border-[#00ff66]"
                   />
                 </div>
+              </div>
+            </div>
+
+            {/* Modalités & Coordonnées de Paiement Maroc */}
+            <div className="p-4 rounded-2xl bg-[#090d14] border border-[#1e2a3c] space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-xs font-bold text-white uppercase font-display tracking-wide">
+                  <CreditCard className="w-4 h-4 text-[#00ff66]" />
+                  <span>Coordonnées pour le paiement ({formatMAD(tournament.entryFeeMAD)})</span>
+                </div>
+                <span className="text-[10px] text-[#00ff66] font-mono font-semibold">Validation 100% sécurisée</span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                {/* Option 1: CIH / Virement Bancaire */}
+                <div className="p-3 rounded-xl bg-[#111724] border border-[#212d40] space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="font-semibold text-white">Virement Bancaire / CIH</span>
+                    <button
+                      type="button"
+                      onClick={() => copyToClipboard('230780000000123456789012', 'rib')}
+                      className="text-[10px] px-2 py-0.5 rounded bg-[#182335] hover:bg-[#202f48] text-[#00ff66] font-mono flex items-center gap-1 transition-colors cursor-pointer"
+                    >
+                      {copiedRib ? (
+                        <>
+                          <Check className="w-3 h-3 text-[#00ff66]" />
+                          <span>Copié !</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3 h-3" />
+                          <span>Copier RIB</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  <p className="font-mono text-[11px] text-slate-300 break-all select-all">
+                    230 780 0000001234567890 12
+                  </p>
+                  <p className="text-[10px] text-slate-400">
+                    Bénéficiaire : <strong className="text-white">FC TOURNAMENT</strong>
+                  </p>
+                </div>
+
+                {/* Option 2: CashPlus / Wafacash / Barid Cash */}
+                <div className="p-3 rounded-xl bg-[#111724] border border-[#212d40] space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="font-semibold text-white">CashPlus / Wafacash</span>
+                    <button
+                      type="button"
+                      onClick={() => copyToClipboard('+212681337566', 'phone')}
+                      className="text-[10px] px-2 py-0.5 rounded bg-[#182335] hover:bg-[#202f48] text-[#00ff66] font-mono flex items-center gap-1 transition-colors cursor-pointer"
+                    >
+                      {copiedPhone ? (
+                        <>
+                          <Check className="w-3 h-3 text-[#00ff66]" />
+                          <span>Copié !</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3 h-3" />
+                          <span>Copier N°</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  <p className="font-mono text-[11px] text-slate-300 select-all">
+                    +212 681 337 566
+                  </p>
+                  <p className="text-[10px] text-slate-400">
+                    Transfert au nom du responsable FC Tournament
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1 text-[11px] text-slate-400">
+                <span>Réglez les frais, puis importez la photo ou capture d'écran du reçu ci-dessous.</span>
+                <a
+                  href={`https://wa.me/212681337566?text=${encodeURIComponent(`Bonjour, je souhaite régler mes frais pour le tournoi ${tournament.name} (${formatMAD(tournament.entryFeeMAD)})`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#00ff66] hover:underline font-semibold flex items-center gap-1 shrink-0"
+                >
+                  <MessageCircle className="w-3.5 h-3.5" />
+                  <span>Aide WhatsApp (+212 681 337 566)</span>
+                </a>
               </div>
             </div>
 

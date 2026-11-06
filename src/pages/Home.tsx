@@ -14,6 +14,13 @@ import {
   ShieldCheck,
   Flame,
   Award,
+  HelpCircle,
+  ChevronDown,
+  ChevronUp,
+  MessageCircle,
+  Check,
+  CreditCard,
+  Zap,
 } from 'lucide-react';
 
 interface HomeProps {
@@ -26,6 +33,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
   const [matches, setMatches] = useState<Match[]>([]);
   const [leaderboard, setLeaderboard] = useState<PlayerLeaderboard[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [expandedFaq, setExpandedFaq] = useState<number | null>(0);
 
   useEffect(() => {
     async function loadHomeData() {
@@ -120,6 +128,104 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                   <span>Créer mon compte</span>
                 </button>
               )}
+
+              <a
+                href="https://wa.me/212681337566"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-5 py-3.5 rounded-xl bg-[#121824]/90 border border-[#232f44] text-[#00ff66] hover:border-[#00ff66]/50 transition-colors font-display text-base font-semibold uppercase tracking-wider flex items-center gap-2 cursor-pointer whitespace-nowrap"
+                title="Poser une question ou rejoindre la communauté sur WhatsApp"
+              >
+                <MessageCircle className="w-5 h-5 text-[#00ff66]" />
+                <span>WhatsApp (+212 681 337 566)</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================================ */}
+      {/* SECTION: COMMENT PARTICIPER EN 3 ÉTAPES                      */}
+      {/* ============================================================ */}
+      <section className="py-12 bg-[#090d14] border-b border-[#161e2c]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto space-y-2 mb-10">
+            <span className="text-xs font-mono text-[#00ff66] uppercase tracking-wider font-semibold">
+              GUIDE DU COMPÉTITEUR
+            </span>
+            <h2 className="font-display text-3xl sm:text-4xl font-black text-white uppercase tracking-tight">
+              Comment participer à un tournoi ?
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-400">
+              Un parcours fluide, transparent et sécurisé : de votre inscription jusqu'au versement garanti de votre Cash Prize.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Step 1 */}
+            <div className="p-6 rounded-3xl bg-[#0e131d] border border-[#1b2537] hover:border-[#00ff66]/40 transition-all flex flex-col justify-between space-y-4 group shadow-lg">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="font-display font-black text-3xl text-[#00ff66]">01</span>
+                  <div className="w-10 h-10 rounded-2xl bg-[#00ff66]/10 border border-[#00ff66]/30 flex items-center justify-center text-[#00ff66]">
+                    <Gamepad2 className="w-5 h-5" />
+                  </div>
+                </div>
+                <h3 className="font-display text-xl font-black text-white uppercase tracking-wide">
+                  Choisis ton Tournoi
+                </h3>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Consulte le calendrier des tournois, choisis ta formule de compétition (Aller-Retour ou Élimination) et inscris ton Gamertag et ton équipe de prédilection.
+                </p>
+              </div>
+              <div className="text-[11px] font-mono text-slate-400 pt-3 border-t border-[#172030] flex items-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-[#00ff66]" />
+                <span>Tous niveaux acceptés · Inscriptions 24h/24</span>
+              </div>
+            </div>
+
+            {/* Step 2 */}
+            <div className="p-6 rounded-3xl bg-[#0e131d] border border-[#1b2537] hover:border-[#00ff66]/40 transition-all flex flex-col justify-between space-y-4 group shadow-lg">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="font-display font-black text-3xl text-[#00ff66]">02</span>
+                  <div className="w-10 h-10 rounded-2xl bg-[#00ff66]/10 border border-[#00ff66]/30 flex items-center justify-center text-[#00ff66]">
+                    <CreditCard className="w-5 h-5" />
+                  </div>
+                </div>
+                <h3 className="font-display text-xl font-black text-white uppercase tracking-wide">
+                  Règle les Frais & Rejoins WhatsApp
+                </h3>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Effectue ton règlement sécurisé par CIH Bank, virement ou CashPlus. Dès validation, tu es automatiquement ajouté au salon officiel WhatsApp des compétiteurs.
+                </p>
+              </div>
+              <div className="text-[11px] font-mono text-slate-400 pt-3 border-t border-[#172030] flex items-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-[#00ff66]" />
+                <span>Salon WhatsApp officiel · Support réactif</span>
+              </div>
+            </div>
+
+            {/* Step 3 */}
+            <div className="p-6 rounded-3xl bg-[#0e131d] border border-[#1b2537] hover:border-[#00ff66]/40 transition-all flex flex-col justify-between space-y-4 group shadow-lg">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="font-display font-black text-3xl text-[#00ff66]">03</span>
+                  <div className="w-10 h-10 rounded-2xl bg-[#00ff66]/10 border border-[#00ff66]/30 flex items-center justify-center text-[#00ff66]">
+                    <Trophy className="w-5 h-5" />
+                  </div>
+                </div>
+                <h3 className="font-display text-xl font-black text-white uppercase tracking-wide">
+                  Joue tes Matchs & Gagne
+                </h3>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Dispute tes rencontres chaque week-end de 14h à 21h. Téléverse la capture de fin de match : l'arbitre homologue le résultat et ton Cash Prize est versé sous 24h !
+                </p>
+              </div>
+              <div className="text-[11px] font-mono text-slate-400 pt-3 border-t border-[#172030] flex items-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-[#00ff66]" />
+                <span>Cash Prize garanti · Homologation certifiée</span>
+              </div>
             </div>
           </div>
         </div>
@@ -409,6 +515,139 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ============================================================ */}
+      {/* SECTION: NOS GARANTIES & ENGAGEMENTS OFFICIELS               */}
+      {/* ============================================================ */}
+      <section className="py-14 bg-[#090d14] border-b border-[#161e2c]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-xl mx-auto space-y-2 mb-10">
+            <span className="text-xs font-mono text-[#00ff66] uppercase tracking-wider font-semibold">
+              TRANSPARENCE & INTÉGRITÉ
+            </span>
+            <h2 className="font-display text-3xl sm:text-4xl font-black text-white uppercase tracking-tight">
+              Pourquoi nous faire confiance ?
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-400">
+              Des standards professionnels appliqués à chaque match pour garantir la meilleure expérience compétitive au Maroc.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="p-5 rounded-2xl bg-[#0e131d] border border-[#1c2638] space-y-2.5">
+              <div className="w-10 h-10 rounded-xl bg-[#00ff66]/10 border border-[#00ff66]/30 flex items-center justify-center text-[#00ff66]">
+                <Trophy className="w-5 h-5" />
+              </div>
+              <h3 className="font-display text-lg font-bold text-white uppercase">Cash Prize Garanti</h3>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                Toutes les dotations annoncées sont 100% garanties et versées sous 24h par virement bancaire ou CashPlus dès la finale terminée.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-[#0e131d] border border-[#1c2638] space-y-2.5">
+              <div className="w-10 h-10 rounded-xl bg-[#00ff66]/10 border border-[#00ff66]/30 flex items-center justify-center text-[#00ff66]">
+                <ShieldCheck className="w-5 h-5" />
+              </div>
+              <h3 className="font-display text-lg font-bold text-white uppercase">Arbitrage Neutre</h3>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                Chaque score est vérifié sur capture d'écran certifiée avec historique complet des matchs et contrôle strict de l'éthique sportive.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-[#0e131d] border border-[#1c2638] space-y-2.5">
+              <div className="w-10 h-10 rounded-xl bg-[#00ff66]/10 border border-[#00ff66]/30 flex items-center justify-center text-[#00ff66]">
+                <MessageCircle className="w-5 h-5" />
+              </div>
+              <h3 className="font-display text-lg font-bold text-white uppercase">Salon WhatsApp Dédié</h3>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                Un groupe WhatsApp officiel rassemble tous les compétiteurs du tournoi pour faciliter l'échange des IDs et le lancement immédiat des matchs.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-[#0e131d] border border-[#1c2638] space-y-2.5">
+              <div className="w-10 h-10 rounded-xl bg-[#00ff66]/10 border border-[#00ff66]/30 flex items-center justify-center text-[#00ff66]">
+                <Zap className="w-5 h-5" />
+              </div>
+              <h3 className="font-display text-lg font-bold text-white uppercase">Support 7j/7 Réactif</h3>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                Notre staff est joignable en permanence au +212 681 337 566 et par e-mail alio227ng@gmail.com pour vous guider et résoudre tout litige.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================================ */}
+      {/* SECTION: FOIRE AUX QUESTIONS (FAQ)                           */}
+      {/* ============================================================ */}
+      <section className="py-16 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div className="text-center max-w-xl mx-auto space-y-2 mb-10">
+          <span className="text-xs font-mono text-[#00ff66] uppercase tracking-wider font-semibold">
+            RÉPONSES À VOS QUESTIONS
+          </span>
+          <h2 className="font-display text-3xl sm:text-4xl font-black text-white uppercase tracking-tight">
+            Foire Aux Questions
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-400">
+            Tout ce qu'il faut savoir sur le déroulement des tournois, l'arbitrage et le paiement des gains.
+          </p>
+        </div>
+
+        <div className="space-y-3">
+          {[
+            {
+              q: "Quels sont les jours et horaires officiels des compétitions ?",
+              a: "Les matchs se déroulent les week-ends de 14h00 à 21h00 (heure marocaine / Africa/Casablanca). Les inscriptions en ligne restent ouvertes 24h/24 jusqu'à la clôture des places.",
+            },
+            {
+              q: "Comment sont versés les Cash Prizes en cas de victoire ?",
+              a: "Les dotations financières (Cash Prizes) sont garanties et transmises sous 24h après la finale officielle, par virement bancaire (CIH, Attijariwafa, etc.) ou transfert d'argent CashPlus/Wafacash selon la préférence du vainqueur.",
+            },
+            {
+              q: "Comment est validé le score d'un match ?",
+              a: "À l'issue de chaque rencontre, le joueur vainqueur téléverse la capture d'écran du score final directement sur la plateforme ou dans le salon WhatsApp. L'équipe d'arbitrage vérifie l'authenticité et homologue le résultat dans le tableau officiel.",
+            },
+            {
+              q: "Quelles sont les règles de jeu et modes adoptés ?",
+              a: "Par défaut, les tournois appliquent le mode 95 compétitif (toutes les équipes ont le même niveau de statistiques pour un équilibre parfait) avec des mi-temps de 6 minutes. En cas d'égalité en élimination directe, prolongations classiques puis tirs au but.",
+            },
+            {
+              q: "Que se passe-t-il si un joueur quitte ou subit une déconnexion ?",
+              a: "En cas de déconnexion avant la 15e minute sans but marqué, le match est rejoué avec l'accord de l'arbitre. Passé ce délai ou en cas de ragequit volontaire, la défaite par forfait (3-0) est automatiquement appliquée.",
+            },
+            {
+              q: "Comment contacter l'organisation en cas de problème ?",
+              a: "Notre équipe est joignable 7j/7 directement par WhatsApp au +212 681 337 566 ou par e-mail à alio227ng@gmail.com pour vous assister immédiatement.",
+            },
+          ].map((faq, idx) => {
+            const isExpanded = expandedFaq === idx;
+            return (
+              <div
+                key={idx}
+                className="rounded-2xl bg-[#0b0f16] border border-[#1b2537] overflow-hidden transition-all duration-200"
+              >
+                <button
+                  type="button"
+                  onClick={() => setExpandedFaq(isExpanded ? null : idx)}
+                  className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-[#101724] transition-colors"
+                >
+                  <span className="font-display text-base sm:text-lg font-bold text-white uppercase tracking-tight">
+                    {faq.q}
+                  </span>
+                  <div className="w-8 h-8 rounded-xl bg-[#141d2c] border border-[#223046] flex items-center justify-center text-[#00ff66] shrink-0">
+                    {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  </div>
+                </button>
+                {isExpanded && (
+                  <div className="px-5 pb-5 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-[#162031] pt-3 bg-[#0d121c]">
+                    {faq.a}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </section>
 

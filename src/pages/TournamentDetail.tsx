@@ -21,6 +21,11 @@ import {
   Gamepad2,
   Shield,
   HelpCircle,
+  Share2,
+  Copy,
+  Check,
+  CreditCard,
+  MessageCircle,
 } from 'lucide-react';
 
 interface TournamentDetailProps {
@@ -40,12 +45,20 @@ export const TournamentDetail: React.FC<TournamentDetailProps> = ({
   const [activeTab, setActiveTab] = useState<'overview' | 'standings' | 'matches'>('overview');
   const [actionLoading, setActionLoading] = useState<boolean>(false);
   const [actionMessage, setActionMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [copiedLink, setCopiedLink] = useState<boolean>(false);
+  const [showPaymentInfo, setShowPaymentInfo] = useState<boolean>(false);
 
   // Registration modal state
   const [showRegistrationModal, setShowRegistrationModal] = useState<boolean>(false);
 
   // Score modal for admin
   const [scoreModalMatch, setScoreModalMatch] = useState<Match | null>(null);
+
+  const handleCopyLink = () => {
+    navigator.clipboard?.writeText(window.location.href);
+    setCopiedLink(true);
+    setTimeout(() => setCopiedLink(false), 2500);
+  };
 
   const fetchDetail = async () => {
     try {
@@ -294,6 +307,88 @@ export const TournamentDetail: React.FC<TournamentDetailProps> = ({
             </div>
           </div>
         </div>
+
+        {/* Share & Payment Modalities Strip */}
+        <div className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl bg-[#0c1017] border border-[#1d2638]">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleCopyLink}
+              className="px-3.5 py-2 rounded-xl bg-[#121824] hover:bg-[#182131] border border-[#232f44] text-xs font-semibold text-slate-200 flex items-center gap-2 cursor-pointer transition-colors"
+              title="Copier l'adresse de la page du tournoi"
+            >
+              {copiedLink ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-[#00ff66]" />
+                  <span className="text-[#00ff66]">Lien copié dans le presse-papier !</span>
+                </>
+              ) : (
+                <>
+                  <Share2 className="w-3.5 h-3.5 text-[#00ff66]" />
+                  <span>Partager le tournoi</span>
+                </>
+              )}
+            </button>
+
+            <a
+              href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`🏆 Rejoins-moi sur FC Tournament pour le tournoi "${tournament.name}" (${tournament.prizePool} de Cash Prize) ! Inscriptions ici : ${typeof window !== 'undefined' ? window.location.href : 'https://fc-tournament.com'}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3.5 py-2 rounded-xl bg-[#121824] hover:bg-[#182131] border border-[#232f44] text-xs font-semibold text-[#00ff66] flex items-center gap-2 transition-colors cursor-pointer"
+            >
+              <MessageCircle className="w-3.5 h-3.5" />
+              <span>Défier sur WhatsApp</span>
+            </a>
+          </div>
+
+          <button
+            onClick={() => setShowPaymentInfo(!showPaymentInfo)}
+            className="px-3.5 py-2 rounded-xl bg-[#141d2c] hover:bg-[#1c283d] border border-[#283852] text-xs font-semibold text-slate-300 flex items-center gap-2 cursor-pointer transition-colors"
+          >
+            <CreditCard className="w-3.5 h-3.5 text-[#00ff66]" />
+            <span>{showPaymentInfo ? 'Masquer les coordonnées' : 'Comment payer les frais ?'}</span>
+          </button>
+        </div>
+
+        {/* Expandable Payment Modalities Card */}
+        {showPaymentInfo && (
+          <div className="p-5 rounded-2xl bg-[#0a0d15] border border-[#1f2b3e] space-y-4 animate-in fade-in duration-200">
+            <div className="flex items-center justify-between border-b border-[#182233] pb-3">
+              <div className="flex items-center gap-2">
+                <CreditCard className="w-4 h-4 text-[#00ff66]" />
+                <h4 className="font-display text-base font-bold text-white uppercase tracking-wide">
+                  Coordonnées officielles de règlement ({formatMAD(tournament.entryFeeMAD)})
+                </h4>
+              </div>
+              <span className="text-[11px] font-mono text-[#00ff66]">Validation manuelle sécurisée</span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+              <div className="p-4 rounded-xl bg-[#111724] border border-[#1f2c41] space-y-1.5">
+                <span className="text-white font-semibold block">1. Virement Bancaire (CIH / Attijariwafa / Toutes banques)</span>
+                <p className="font-mono text-slate-300 text-xs select-all">
+                  RIB : <strong className="text-white">230 780 0000001234567890 12</strong>
+                </p>
+                <p className="text-[11px] text-slate-400">
+                  Bénéficiaire : <strong>FC TOURNAMENT MAROC</strong>
+                </p>
+              </div>
+
+              <div className="p-4 rounded-xl bg-[#111724] border border-[#1f2c41] space-y-1.5">
+                <span className="text-white font-semibold block">2. Transfert d'argent (CashPlus / Wafacash / Barid Cash)</span>
+                <p className="font-mono text-slate-300 text-xs select-all">
+                  Numéro : <strong className="text-white">+212 681 337 566</strong>
+                </p>
+                <p className="text-[11px] text-slate-400">
+                  Nom du bénéficiaire : <strong>Responsable FC Tournament</strong>
+                </p>
+              </div>
+            </div>
+
+            <p className="text-[11px] text-slate-400">
+              💡 Après avoir effectué votre transfert, cliquez sur <strong>« S'inscrire au tournoi »</strong> et déposez la capture d'écran du reçu bancaire. L'administrateur valide votre place et vous recevrez le lien du groupe WhatsApp.
+            </p>
+          </div>
+        )}
 
         {/* Action feedback message */}
         {actionMessage && (

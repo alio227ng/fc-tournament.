@@ -15,6 +15,7 @@ export const Tournaments: React.FC<TournamentsProps> = ({ onNavigate }) => {
   const [search, setSearch] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [formatFilter, setFormatFilter] = useState<string>('all');
+  const [sortBy, setSortBy] = useState<'date' | 'fee'>('date');
 
   useEffect(() => {
     async function fetchTournaments() {
@@ -30,16 +31,23 @@ export const Tournaments: React.FC<TournamentsProps> = ({ onNavigate }) => {
     fetchTournaments();
   }, []);
 
-  const filteredTournaments = tournaments.filter((t) => {
-    const matchesSearch =
-      t.name.toLowerCase().includes(search.toLowerCase()) ||
-      t.description.toLowerCase().includes(search.toLowerCase());
+  const filteredTournaments = tournaments
+    .filter((t) => {
+      const matchesSearch =
+        t.name.toLowerCase().includes(search.toLowerCase()) ||
+        t.description.toLowerCase().includes(search.toLowerCase());
 
-    const matchesStatus = statusFilter === 'all' || t.status === statusFilter;
-    const matchesFormat = formatFilter === 'all' || t.format === formatFilter;
+      const matchesStatus = statusFilter === 'all' || t.status === statusFilter;
+      const matchesFormat = formatFilter === 'all' || t.format === formatFilter;
 
-    return matchesSearch && matchesStatus && matchesFormat;
-  });
+      return matchesSearch && matchesStatus && matchesFormat;
+    })
+    .sort((a, b) => {
+      if (sortBy === 'fee') {
+        return a.entryFeeMAD - b.entryFeeMAD;
+      }
+      return new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
+    });
 
   return (
     <div className="min-h-screen bg-[#07090e] py-10 px-4 sm:px-6 lg:px-8">
@@ -106,6 +114,22 @@ export const Tournaments: React.FC<TournamentsProps> = ({ onNavigate }) => {
             <option value="single_elimination">Élimination directe</option>
             <option value="groups_playoffs">Poules puis Finales</option>
           </select>
+
+          {/* Sort selector */}
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as 'date' | 'fee')}
+            className="px-3 py-2 text-xs rounded-xl bg-[#111722] border border-[#202b3d] text-slate-300 focus:outline-none focus:border-[#00ff66] cursor-pointer"
+          >
+            <option value="date">Trier par date</option>
+            <option value="fee">Trier par frais</option>
+          </select>
+        </div>
+
+        {/* Results summary */}
+        <div className="flex items-center justify-between text-xs text-slate-400 font-mono px-1">
+          <span>{filteredTournaments.length} tournoi{filteredTournaments.length > 1 ? 's' : ''} trouvé{filteredTournaments.length > 1 ? 's' : ''}</span>
+          <span className="text-[#00ff66] font-semibold">Inscriptions en ligne 24h/24</span>
         </div>
 
         {/* Tournament Cards List */}
